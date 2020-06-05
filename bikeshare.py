@@ -1,28 +1,16 @@
 import time
-import pandas as pd
+import click
 import numpy as np
+import pandas as pd
+from helpfunc import check_col, validate_input
+
+# `click` setting to use `-h` flag display help in addiiton to `--help` by default
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+
 
 CITY_DATA = { 'Chicago': 'chicago.csv',
               'New York': 'new_york_city.csv',
               'Washington': 'washington.csv' }
-
-def validate_input(message, valid_inputs, list_input=False):
-    """
-    Validate user input for both single entry and multiple entries
-    Return single entry as a string and mutliple entries as a list
-    """
-    while True:
-        user_input = input(message)
-        if list_input:
-            user_input = [x.lower().strip() for x in user_input.split(',')]
-            if len([x for x in user_input if x not in valid_inputs])==0:
-                break
-        else:
-            if user_input.lower() in valid_inputs:
-                break
-        
-    return user_input
-        
 
 def get_filters():
     """
@@ -124,14 +112,7 @@ def show_data(df):
             print(df[i:i+5])
         except StopIteration:
             break
-        
 
-def check_col(df, col_name):
-    if col_name in df.columns:
-        return True
-    else:
-        print("No data on {} for this city. ".format(col_name))
-        return False
         
 
 def time_stats(df):
