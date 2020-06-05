@@ -1,8 +1,9 @@
 import time
 import click
+from pkg_resources import resource_stream
 import numpy as np
 import pandas as pd
-from helpfunc import check_col, validate_input
+from .helpfunc import check_col, validate_input
 
 # `click` setting to use `-h` flag display help in addiiton to `--help` by default
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -54,7 +55,8 @@ def load_data(city, month, day):
     Returns:
         df - Pandas DataFrame containing city data filtered by month and day
     """
-    df = pd.read_csv(CITY_DATA[city.title()])
+    stream = resource_stream(__name__, CITY_DATA[city.title()])
+    df = pd.read_csv(stream)
 
     # all column names having the first letter of each work capitalized 
     df.rename(str.title, axis=1)
