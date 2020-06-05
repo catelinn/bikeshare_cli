@@ -15,7 +15,7 @@ setup(name='bikeshare',
       packages=['bikeshare'],
       install_requires=requirements,
       entry_points={
-          'console_scripts': ['bikeshare=bikeshare.bikeshare:main'], #command=package.module:function
+          'console_scripts': ['bikeshare=bikeshare.cli:main'], #command=package.module:function
       },
       include_package_data=True, # include non-code files in MANIFEST.in
       zip_safe=False)
