@@ -15,31 +15,54 @@ def restart_program():
     os.execl(python, python, * sys.argv)
 
 
-def validate_intval(ctx, value, valid, errmsg):
+# ctx (context) required for using the function as callback in parameters validation
+def validate_vallist(ctx, value, a_val, valid, errmsg):
     """
-    Validate months/days option integer value
+    Validate a string value that converts to multiple values
     """
     try:
-        value = list(set(str(value)))
-        result = [int(x) for x in value if x in list(map(str, valid))]
-        click.echo(f"You have entered {value}, accepted value(s) are {result}\n")
+        if a_val in value:
+            click.echo(f"You have entered {a_val} to select all.\n")
+            result = [a_val]
+        else:
+            value = list(set(value))
+            value.sort()
+            result = [x for x in value if x in valid]
+            click.echo(f"You have entered {value}, accepted value(s) are {result}\n")
     except ValueError:
             raise click.BadParameter(errmsg)
     finally:
-        if len(result)==0:
+        if len(result) == 0:
             raise click.BadParameter(errmsg)
         return result
 
+def validate_val(ctx, value, valid, errmsg):
+    """
+    Validate a string value that won't convert to multiple values
+    """
+    if value.lower() in [x.lower() for x in valid]:
+        return value.title()
+    else:
+        raise click.BadParameter(errmsg)
+
+
+def validate_city(ctx, value):
+    valid = ['chicago', 'new york', 'washington']
+    errmsg = 'Choose city from Chicago, New\ York, Washington (case insensitve).'
+    return validate_val(ctx, value, valid, errmsg)
+
+
 def validate_months(ctx, value):
-    valid = [0,1,2,3,4,5,6]
-    errmsg ='month can only be from 0 to 6 (0 as for all months available)'
-    return validate_intval(ctx, value, valid, errmsg)
+    a_val = '0'
+    valid = ['1','2','3','4','5','6']
+    errmsg ='Month can only be from 0 to 6 (0 for all months available)'
+    return validate_vallist(ctx, value, a_val, valid, errmsg)
 
 def validate_days(ctx, value):
-    # 012 only returns [1,2] only
-    valid = [0,1,2,3,4,5,6,7]
-    errmsg = 'day can only be from 0 to 7 (0 as for all days available)'
-    return validate_intval(ctx, value, valid, errmsg)
+    a_val = '0'
+    valid = ['1','2','3','4','5','6','7']
+    errmsg = 'Day can only be from 0 to 7 (0 for all days available)'
+    return validate_vallist(ctx, value, a_val, valid, errmsg)
 
 
 def show_data(df, line_num):

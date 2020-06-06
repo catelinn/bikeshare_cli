@@ -4,7 +4,7 @@ import click
 import numpy as np
 import pandas as pd
 
-from .helpfunc import validate_days, validate_months, show_data, station_stats,\
+from .helpfunc import validate_city, validate_days, validate_months, show_data, station_stats,\
     trip_duration_stats, time_stats, user_stats, restart_program
 
 CITY_DATA = { 'Chicago': 'data/chicago.csv',
@@ -21,14 +21,20 @@ class Config:
 pass_config = click.make_pass_decorator(Config, ensure=True)
 
 @click.group(context_settings=CONTEXT_SETTINGS)
-@click.argument('city', type=click.Choice(['chicago', 'new york', 'washington']))
+@click.argument('city', callback=validate_city)
+                #type=click.Choice(['chicago', 'new york', 'washington']))
 @pass_config
 def main(config, city):
     """
-    Usage: 
-    bikeshare city filter -m 23 -d 67 --s summary -time -station -trip -user
+    
+    bikeshare chicago filter [-m 23 -d 67 --s] 
+    
+    \b
+    summary [-time -station -trip -user]
+    
+    \b
+    This program explores the bikeshare data for a specific city.
 
-    This script explore bikeshare data for a specific city.
     """
     click.clear()
     click.echo(f'Hello! Let\'s explore some US bikeshare data for {city}!\n')
@@ -36,19 +42,19 @@ def main(config, city):
     
     
 @main.command('filter')
-@click.option('-month', '-m', type=click.INT,callback=validate_months, prompt=True,
+@click.option('-month', '-m', callback=validate_months, prompt=True,
              help="Enter 0 for all months, 1 for January and so on, maximum is 6 (up to June).")
-@click.option('-day', '-d', type=click.INT, callback=validate_days, prompt=True,
+@click.option('-day_of_week', '-d', callback=validate_days, prompt=True,
              help="Enter 0 for all days of a week, 1 for Monday and so on, maximum is 7 (up to Sunday).")
 @click.option('--show', '--s', default=True, is_flag=True,
               help='Show data table, 5 lines each time, if flagged')
 @click.option('--line', '--l', type=click.INT, default=5, help="Number of lines of data to show")
 @pass_config
-def filter(config, month, day, show, line):
+def filter(config, month, day_of_week, show, line):
     """
-    Filter city data by month and day.
+    Filter city data by month and day of week for loading.
     """
-    stream = resource_stream(__name__, CITY_DATA[config.city.title()])
+    stream = resource_stream(__name__, CITY_DATA[config.city])
     df = pd.read_csv(stream)
 
     # all column names having the first letter of each work capitalized 
@@ -64,14 +70,15 @@ def filter(config, month, day, show, line):
     df_copy = df.copy()
 
     # filter by month(s) 
-    if 0 not in month:
+    if '0' not in month:
         # filter by month(s) to create the new dataframe
-        df_copy = df_copy[df_copy['month'].isin(month)]
+        df_copy = df_copy[df_copy['month'].isin(list(map(int, month)))]
 
     # filter by day of week
-    if 0 not in day:
+    if '0' not in day_of_week:
         days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-        filters = [days[i-1] for i in day]
+        day_of_week = list(map(int, day_of_week))
+        filters = [days[i-1] for i in day_of_week]
         # filter by day of week to create the new dataframe
         df_copy = df_copy[df_copy['day_of_week'].str.lower().isin(filters)]
     
