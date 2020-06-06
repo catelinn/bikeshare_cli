@@ -89,15 +89,15 @@ def time_stats(df):
 
     if check_col(df, 'Start Time'):
         # TO DO: display the most common month
-        click.echo("The most common month is:", df['month'].mode()[0])
+        click.echo(f"The most common month is:{df['month'].mode()[0]}")
 
         # TO DO: display the most common day of week
-        click.echo("The most common day of week is:", df['day_of_week'].mode()[0])
+        click.echo(f"The most common day of week is:{df['day_of_week'].mode()[0]}")
 
         # TO DO: display the most common start hour
-        click.echo("The most common start hour is:", df['Start Time'].dt.hour.mode()[0])
+        click.echo(f"The most common start hour is:{df['Start Time'].dt.hour.mode()[0]}")
 
-    click.echo("\nThis took %s seconds." % (time.time() - start_time))
+    click.echo(f"\nThis took {time.time() - start_time} seconds")
     click.echo('-'*40)
 
 
@@ -109,18 +109,17 @@ def station_stats(df):
 
     if check_col(df, 'Start Station'):
         # TO DO: display most commonly used start station
-        click.echo("The most commonly used start station:", df['Start Station'].mode()[0])
+        click.echo(f"The most commonly used start station:{df['Start Station'].mode()[0]}")
 
     if check_col(df, 'End Station'):
         # TO DO: display most commonly used end station
-        click.echo("The most commonly used end station:", df['End Station'].mode()[0])
+        click.echo(f"The most commonly used end station:{df['End Station'].mode()[0]}")
 
     # TO DO: display most frequent combination of start station and end station trip
     if check_col(df, 'Start Station') and check_col(df, 'End Station') :
-        click.echo("The most frequent combination of start station and end station trip:", 
-            (df['Start Station']+' | '+df['End Station']).mode()[0])
+        click.echo("The most frequent combination of start station and end station trip:{}".format((df['Start Station']+' | '+df['End Station']).mode()[0]))
 
-    click.echo("\nThis took %s seconds." % (time.time() - start_time))
+    click.echo(f"\nThis took {time.time() - start_time} seconds")
     click.echo('-'*40)
 
 
@@ -132,12 +131,12 @@ def trip_duration_stats(df):
 
     if check_col(df, 'Trip Duration'):
         # TO DO: display total travel time
-        click.echo("Total travel time: ", df['Trip Duration'].sum())
+        click.echo(f"Total travel time:{df['Trip Duration'].sum()}" )
 
         # TO DO: display mean travel time
-        click.echo("The average travel time: ", df['Trip Duration'].mean())
+        click.echo(f"The average travel time: {df['Trip Duration'].mean()}")
 
-    click.echo("\nThis took %s seconds." % (time.time() - start_time))
+    click.echo(f"\nThis took {time.time() - start_time} seconds")
     click.echo('-'*40)
 
 
@@ -149,20 +148,20 @@ def user_stats(df):
 
     # TO DO: Display counts of user types
     if check_col(df, 'User Type'): 
-        click.echo(pd.DataFrame(df['User Type'].value_counts()),'\n')
+        click.echo(f"{pd.DataFrame(df['User Type'].value_counts())}\n")
 
     # TO DO: Display counts of gender
     if check_col(df, 'Gender'):
-        click.echo(pd.DataFrame(df['Gender'].value_counts()), '\n')
+        click.echo(f"{pd.DataFrame(df['Gender'].value_counts())}\n")
 
     # TO DO: Display earliest, most recent, and most common year of birth
     if check_col(df, 'Birth Year'):
-        click.echo("The birth year of the oldest user is: ", df['Birth Year'].min())
-        click.echo("The birth year of the youngest user is: ", df['Birth Year'].max())
-        click.echo("The most common birth year of users is: ", df['Birth Year'].mode()[0])
+        click.echo(f"The birth year of the oldest user is: {df['Birth Year'].min()}")
+        click.echo(f"The birth year of the youngest user is: {df['Birth Year'].max()}")
+        click.echo(f"The most common birth year of users is: {df['Birth Year'].mode()[0]}")
     
 
-    click.echo("\nThis took %s seconds." % (time.time() - start_time))
+    click.echo(f"\nThis took {time.time() - start_time} seconds")
     click.echo('-'*40)
 
 
