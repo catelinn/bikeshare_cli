@@ -1,0 +1,75 @@
+#================= Python programming References ======================================
+
+### convert object to dt
+https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.to_datetime.html?highlight=to_datetime
+
+
+### access day, hour, month of dt object
+https://pandas.pydata.org/pandas-docs/stable/getting_started/basics.html#dt-accessor
+https://pandas.pydata.org/pandas-docs/stable/search.html?q=dt.day
+
+### return index of a specific element in a list
+https://www.programiz.com/python-programming/methods/list/index
+
+
+### rename columns to match title()
+https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.rename.html
+
+
+### if list of months are contained in a 'month' column
+https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.isin.html
+
+
+#============= CLI scripts References ========================
+
+
+# Build a cli program with Click (2016 video, slides and example code)
+https://realpython.com/comparing-python-command-line-parsing-libraries-argparse-docopt-click/
+https://speakerd.s3.amazonaws.com/presentations/f6a2cf9375074278810eb4ca82e74ffa/10h50_-_Sebastian_Vetter_-_Click__A_Pleasure_To_Write__A_Pleasure_To_Use-1bsme542861qt.pdf
+https://github.com/elbaschid/pycon-talk-click-example/blob/master/ad_notifier/cli.py
+https://www.youtube.com/watch?v=SDyHLG2ltSY
+
+
+# Commands and Groups - Understand how to structure subcommands
+https://click.palletsprojects.com/en/7.x/commands/
+https://youtu.be/kNke39OZ2k0?t=747 - Adding and using subcommands 
+https://youtu.be/kNke39OZ2k0?t=807 - group have the callbacks executed before the callbacks executed in subcommands
+https://youtu.be/kNke39OZ2k0?t=866 - how to communicate data from group to subcommand functions
+https://click.palletsprojects.com/en/master/complex/#interleaved-commands - click.make_pass_decorator()
+
+# Click Documentation
+https://click.palletsprojects.com/en/7.x/#documentation
+
+# How to write help message for CLI
+https://en.wikipedia.org/wiki/Usage_message
+
+# How to add a custom error message to main command in python-click
+https://stackoverflow.com/a/43922088
+
+#change styling using `click.style`
+https://click.palletsprojects.com/en/7.x/api/#click.style
+
+
+#=========== Packaging References ============================
+
+# How to package CLI scripts using Python
+https://www.geeksforgeeks.org/command-line-scripts-python-packaging/
+https://python-packaging.readthedocs.io/en/latest/command-line-scripts.html - use `conwole_scripts` enntry point
+https://python-packaging.readthedocs.io/en/latest/everything.html - putting it all together
+https://python-packaging.readthedocs.io/en/latest/minimal.html - install the package locally or from published distribution
+
+# Adding data files to the package
+https://python-packaging.readthedocs.io/en/latest/non-code-files.html
+https://kiwidamien.github.io/making-a-python-package-vi-including-data-files.html
+https://kiwidamien.github.io/making-a-python-package-vi-including-data-files.html - make data file as stream-like object to read in
+https://packaging.python.org/guides/using-manifest-in/ - include files using `MANIFEST.in`
+
+# `__init__.py` vs `__main__.py`
+https://stackoverflow.com/a/31329365
+
+# `setuptools` integration with `click`
+https://click.palletsprojects.com/en/5.x/setuptools/
+
+# Test
+https://python-packaging.readthedocs.io/en/latest/testing.html
+
