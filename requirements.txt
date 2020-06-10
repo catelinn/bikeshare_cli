@@ -1,4 +1,5 @@
-Click
-numpy
-pandas
+click==7.1.2
+numpy==1.18.2
+pandas==1.0.3
 colorma # for Windows user to see ANSI color from click.echo()
+matplotlib==3.2.1
