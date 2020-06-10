@@ -30,13 +30,14 @@ def filter(ctx, city, month, day_of_week, show, line):
     """
     Filter city data by month, day of week; Show data (optional) and summary statistics. 
     """
-    
+
     if city is None:
         city = validate_city(ctx, click.prompt(TEXT['prompt']['city']))
         month = validate_months(ctx, click.prompt(TEXT['prompt']['month']))
         day_of_week = validate_days(ctx, click.prompt(TEXT['prompt']['day_of_week']))
-        show = click.prompt(TEXT['prompt']['show'], default=False, type=click.BOOL)
-        line = click.prompt(TEXT['prompt']['line'], default=5, type=click.INT)
+        show = click.confirm(TEXT['prompt']['show'], default=True)
+        if show == True:
+            line = click.prompt(TEXT['prompt']['line'], default=5, type=click.INT)
         
 
     df = stream_to_df(CITY_DATA[city])
@@ -68,7 +69,7 @@ def filter(ctx, city, month, day_of_week, show, line):
         df_copy = df_copy[df_copy['day_of_week'].str.lower().isin(filters)]
     
     # Show dataframe information
-    click.echo(f"\n{df_copy.info()}\n")
+    click.echo(f"{df_copy.info()}\n")
 
     # Show data (default True and Line number as 10)
     if show:

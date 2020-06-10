@@ -15,10 +15,10 @@ CITY_DATA = { 'Chicago': 'data/chicago.csv',
 
 
 TEXT = {'prompt': {
-                    'city': "City - Chicago, New York or Washington",
-                    'month': "Months - 0 (all months), 1 (January) and so on, up to 6 (June), multiple values accepted",
-                    'day_of_week': "Days of week - 0 (all days), 1 (Monday) and so on, up to 7 (Sunday), multiple values accepted",
-                    'show': "Show data",
+                    'city': "City? - Chicago, New York or Washington",
+                    'month': "Month? - 0 (all months), 1 (January) and so on, up to 6 (June), multiple values accepted",
+                    'day_of_week': "Day? - 0 (all days), 1 (Monday) and so on, up to 7 (Sunday), multiple values accepted",
+                    'show': "Show data?",
                     'line': "Number of line to show - enter [an integer] or press <Enter> to use default value"
                     },
         'help':  {
