@@ -29,6 +29,9 @@ TEXT = {'prompt': {
                     'line':"Number of lines of data to show, default to 5."
                     }}
 
+ECHO_STYLE = {'calculate': {'fg':'red'},
+              'time': {'fg':'blue'}
+            }
 
 def stream_to_df(fdir):
     stream = resource_stream(__name__, fdir)
@@ -115,7 +118,7 @@ def check_col(df, col_name):
 def time_stats(df):
     """Displays statistics on the most frequent times of travel."""
 
-    click.echo('\nCalculating The Most Frequent Times of Travel...\n')
+    click.secho('\nCalculating The Most Frequent Times of Travel...\n', fg=ECHO_STYLE['calculate']['fg'])
     start_time = time.time()
 
     if check_col(df, 'Start Time'):
@@ -128,14 +131,14 @@ def time_stats(df):
         # TO DO: display the most common start hour
         click.echo(f"The most common start hour is:{df['Start Time'].dt.hour.mode()[0]}")
 
-    click.echo(f"\nThis took {time.time() - start_time} seconds")
+    click.secho(f"\nThis took {time.time() - start_time} seconds", fg=ECHO_STYLE['time']['fg'])
     click.echo('-'*40)
 
 
 def station_stats(df):
     """Displays statistics on the most popular stations and trip."""
 
-    click.echo('\nCalculating The Most Popular Stations and Trip...\n')
+    click.secho('\nCalculating The Most Popular Stations and Trip...\n', fg=ECHO_STYLE['calculate']['fg'])
     start_time = time.time()
 
     if check_col(df, 'Start Station'):
@@ -150,7 +153,7 @@ def station_stats(df):
     if check_col(df, 'Start Station') and check_col(df, 'End Station') :
         click.echo("The most frequent combination of start station and end station trip:{}".format((df['Start Station']+' | '+df['End Station']).mode()[0]))
 
-    click.echo(f"\nThis took {time.time() - start_time} seconds")
+    click.secho(f"\nThis took {time.time() - start_time} seconds", fg=ECHO_STYLE['time']['fg'])
     click.echo('-'*40)
 
 
@@ -158,7 +161,7 @@ def station_stats(df):
 def trip_duration_stats(df):
     """Displays statistics on the total and average trip duration."""
 
-    click.echo('\nCalculating Trip Duration...\n')
+    click.secho('\nCalculating Trip Duration...\n', fg=ECHO_STYLE['calculate']['fg'])
     start_time = time.time()
 
     if check_col(df, 'Trip Duration'):
@@ -168,14 +171,14 @@ def trip_duration_stats(df):
         # TO DO: display mean travel time
         click.echo(f"The average travel time: {df['Trip Duration'].mean()}")
 
-    click.echo(f"\nThis took {time.time() - start_time} seconds")
+    click.secho(f"\nThis took {time.time() - start_time} seconds", fg=ECHO_STYLE['time']['fg'])
     click.echo('-'*40)
 
 
 def user_stats(df):
     """Displays statistics on bikeshare users."""
 
-    click.echo('\nCalculating User Stats...\n')
+    click.secho('\nCalculating User Stats...\n', fg=ECHO_STYLE['calculate']['fg'])
     start_time = time.time()
 
     # TO DO: Display counts of user types
@@ -193,5 +196,5 @@ def user_stats(df):
         click.echo(f"The most common birth year of users is: {df['Birth Year'].mode()[0]}")
     
 
-    click.echo(f"\nThis took {time.time() - start_time} seconds")
+    click.secho(f"\nThis took {time.time() - start_time} seconds", fg=ECHO_STYLE['time']['fg'])
     click.echo('-'*40)

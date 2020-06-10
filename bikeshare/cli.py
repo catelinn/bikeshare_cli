@@ -17,6 +17,7 @@ def main(ctx):
     This program explores the bikeshare data for Chicago, New York and Washington.
     """
     #ctx.ensure_object(dict)
+    click.echo("Let's explore bikeshare data!")
  
 
 @main.command('filter')
@@ -35,7 +36,7 @@ def filter(ctx, city, month, day_of_week, show, line):
         city = validate_city(ctx, click.prompt(TEXT['prompt']['city']))
         month = validate_months(ctx, click.prompt(TEXT['prompt']['month']))
         day_of_week = validate_days(ctx, click.prompt(TEXT['prompt']['day_of_week']))
-        show = click.confirm(TEXT['prompt']['show'], default=True)
+        show = click.confirm(TEXT['prompt']['show'], default=False)
         if show == True:
             line = click.prompt(TEXT['prompt']['line'], default=5, type=click.INT)
         
@@ -69,6 +70,8 @@ def filter(ctx, city, month, day_of_week, show, line):
         df_copy = df_copy[df_copy['day_of_week'].str.lower().isin(filters)]
     
     # Show dataframe information
+    click.pause()
+    click.clear()
     click.echo(f"{df_copy.info()}\n")
 
     # Show data (default True and Line number as 10)

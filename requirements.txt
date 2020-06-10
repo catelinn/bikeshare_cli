@@ -1,3 +1,4 @@
 Click
 numpy
 pandas
+colorma # for Windows user to see ANSI color from click.echo()
