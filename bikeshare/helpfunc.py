@@ -1,18 +1,38 @@
+import os
+import sys
 import time
+
+from pkg_resources import resource_stream
+
 import click
 import numpy as np
 import pandas as pd
 
-import sys
-import os
+
+CITY_DATA = { 'Chicago': 'data/chicago.csv',
+              'New York': 'data/new_york_city.csv',
+              'Washington': 'data/washington.csv' }
 
 
-def restart_program():
-    """Restarts the current program.
-    Note: this function does not return. Any cleanup action (like
-    saving data) must be done before calling this function."""
-    python = sys.executable
-    os.execl(python, python, * sys.argv)
+TEXT = {'prompt': {
+                    'city': "City - Chicago, New York or Washington",
+                    'month': "Months - 0 (all months), 1 (January) and so on, up to 6 (June), multiple values accepted",
+                    'day_of_week': "Days of week - 0 (all days), 1 (Monday) and so on, up to 7 (Sunday), multiple values accepted",
+                    'show': "Show data",
+                    'line': "Number of line to show - enter [an integer] or press <Enter> to use default value"
+                    },
+        'help':  {
+                    'city':"Choose a city from Chicago, New York or Washington (case insensitive). '\\' to escape space in command line mode",
+                    'month': " 0 (all months), 1 (January) and so on, up to 6 (June). Example: '235' will show data of February, March and May.",
+                    'day_of_week':"0 (all days), 1 (Monday) and so on, up to 7 (Sunday). Example: '17'will show data of Monday and Sunday.",
+                    'show':"Show data table if flagged.",
+                    'line':"Number of lines of data to show, default to 5."
+                    }}
+
+
+def stream_to_df(fdir):
+    stream = resource_stream(__name__, fdir)
+    return pd.read_csv(stream)
 
 
 # ctx (context) required for using the function as callback in parameters validation
@@ -45,24 +65,20 @@ def validate_val(ctx, value, valid, errmsg):
     else:
         raise click.BadParameter(errmsg)
 
-
 def validate_city(ctx, value):
     valid = ['chicago', 'new york', 'washington']
-    errmsg = 'Choose city from Chicago, New\ York, Washington (case insensitve).'
-    return validate_val(ctx, value, valid, errmsg)
+    return validate_val(ctx, value, valid, TEXT['help']['city'])
 
 
 def validate_months(ctx, value):
     a_val = '0'
     valid = ['1','2','3','4','5','6']
-    errmsg ='Month can only be from 0 to 6 (0 for all months available)'
-    return validate_vallist(ctx, value, a_val, valid, errmsg)
+    return validate_vallist(ctx, value, a_val, valid, TEXT['help']['month'])
 
 def validate_days(ctx, value):
     a_val = '0'
     valid = ['1','2','3','4','5','6','7']
-    errmsg = 'Day can only be from 0 to 7 (0 for all days available)'
-    return validate_vallist(ctx, value, a_val, valid, errmsg)
+    return validate_vallist(ctx, value, a_val, valid, TEXT['help']['day_of_week'])
 
 
 def show_data(df, line_num):

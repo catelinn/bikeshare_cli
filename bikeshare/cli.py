@@ -1,63 +1,48 @@
-from pkg_resources import resource_stream
-
 import click
 import numpy as np
 import pandas as pd
 
 from .helpfunc import validate_city, validate_days, validate_months, show_data, station_stats,\
-    trip_duration_stats, time_stats, user_stats, restart_program
+    trip_duration_stats, time_stats, user_stats, stream_to_df, CITY_DATA, TEXT
 
-CITY_DATA = { 'Chicago': 'data/chicago.csv',
-              'New York': 'data/new_york_city.csv',
-              'Washington': 'data/washington.csv' }
+import sys
+
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
-class Config:
-    def __init__(self):
-        self.city=''
-
-
-pass_config = click.make_pass_decorator(Config, ensure=True)
-
 @click.group(context_settings=CONTEXT_SETTINGS)
-@click.argument('city', callback=validate_city)
-                #type=click.Choice(['chicago', 'new york', 'washington']))
-@pass_config
-def main(config, city):
+@click.pass_context
+def main(ctx):
     """
-    
-    bikeshare chicago filter [-m 23 -d 67 --s] 
-    
-    \b
-    summary [-time -station -trip -user]
-    
-    \b
-    This program explores the bikeshare data for a specific city.
+    This program explores the bikeshare data for Chicago, New York and Washington.
+    """
+    #ctx.ensure_object(dict)
+ 
 
-    """
-    click.clear()
-    click.echo(f'Hello! Let\'s explore some US bikeshare data for {city}!\n')
-    config.city = city
-    
-    
 @main.command('filter')
-@click.option('-month', '-m', callback=validate_months, prompt=True,
-             help="Enter 0 for all months, 1 for January and so on, maximum is 6 (up to June).")
-@click.option('-day_of_week', '-d', callback=validate_days, prompt=True,
-             help="Enter 0 for all days of a week, 1 for Monday and so on, maximum is 7 (up to Sunday).")
-@click.option('--show', '--s', default=True, is_flag=True,
-              help='Show data table, 5 lines each time, if flagged')
-@click.option('--line', '--l', type=click.INT, default=5, help="Number of lines of data to show")
-@pass_config
-def filter(config, month, day_of_week, show, line):
+@click.option('-city', '-c', callback=validate_city, prompt=TEXT['prompt']['city'], help=TEXT['help']['city'])
+@click.option('-month', '-m', callback=validate_months, prompt=TEXT['prompt']['month'],help=TEXT['help']['month'])
+@click.option('-day_of_week', '-d', callback=validate_days, prompt=TEXT['prompt']['day_of_week'],help=TEXT['help']['day_of_week'])
+@click.option('--show', '--s', default=False, is_flag=True, prompt=TEXT['prompt']['show'],help=TEXT['help']['show'])
+@click.option('--line', '--l', type=click.INT, default=5, prompt=TEXT['prompt']['line'], help=TEXT['help']['line'])
+@click.pass_context
+def filter(ctx, city, month, day_of_week, show, line):
     """
-    Filter city data by month and day of week for loading.
+    Filter city data by month, day of week; Show data (optional) and summary statistics. 
     """
-    stream = resource_stream(__name__, CITY_DATA[config.city])
-    df = pd.read_csv(stream)
+    
+    if city is None:
+        city = validate_city(ctx, click.prompt(TEXT['prompt']['city']))
+        month = validate_months(ctx, click.prompt(TEXT['prompt']['month']))
+        day_of_week = validate_days(ctx, click.prompt(TEXT['prompt']['day_of_week']))
+        show = click.prompt(TEXT['prompt']['show'], default=False, type=click.BOOL)
+        line = click.prompt(TEXT['prompt']['line'], default=5, type=click.INT)
+        
 
-    # all column names having the first letter of each work capitalized 
+    df = stream_to_df(CITY_DATA[city])
+    
+    
+    # all column names having the first letter of each work capitalized
     df.rename(str.title, axis=1)
 
     # convert the Start Time column to datetime
@@ -83,7 +68,7 @@ def filter(config, month, day_of_week, show, line):
         df_copy = df_copy[df_copy['day_of_week'].str.lower().isin(filters)]
     
     # Show dataframe information
-    click.echo(f"{df_copy.info()}\n")
+    click.echo(f"\n{df_copy.info()}\n")
 
     # Show data (default True and Line number as 10)
     if show:
@@ -96,6 +81,12 @@ def filter(config, month, day_of_week, show, line):
     trip_duration_stats(df_copy)
     user_stats(df_copy)
 
-    if click.confirm(f"Restart to select different month(s) or day(s) for {config.city.title()}?") is not False:
-        restart_program()
+    # Restart upon user confirmation
+    if click.confirm('Restart to explore new dataset?'):
+        sys.argv.clear()
+        ctx.invoke(filter)
+
+
+        
+        
         
