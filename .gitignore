@@ -1,4 +1,5 @@
 # Compiled python modules.
+/__pycache__
 *.pyc
 
 # Setuptools distribution folder.
@@ -8,5 +9,6 @@
 /*.egg-info
 
 
-# Misc
+# Project & data files
 todo.*
+*.csv
